@@ -1,0 +1,17 @@
+{
+  "name": "brew-dashboard-set-preferences",
+  "version": "1.0.0",
+  "description": "Set user preferences for Brew Dashboard",
+  "keywords": [
+    "serverless",
+    "webtasks"
+  ],
+  "license": "MIT",
+  "main": "handler.js",
+  "devDependencies": {
+    "@webtask/serverless-webtasks": "^1.0.1"
+  },
+  "dependencies": {
+    "mongodb": "^2.2.33"
+  }
+}

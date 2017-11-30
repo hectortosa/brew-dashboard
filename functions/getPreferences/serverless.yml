@@ -1,0 +1,13 @@
+
+service:
+  name: brew-dashboard-get-preferences
+
+provider:
+  name: webtasks
+
+functions:
+  main:
+    handler: handler
+
+plugins:
+  - '@webtask/serverless-webtasks'
