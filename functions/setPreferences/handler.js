@@ -1,23 +1,20 @@
 'use strict';
 
 var MongoClient = require('mongodb').MongoClient;
-var url = 'mongodb://brew-dashboard:on9J7xNJh6TmWriDKOKj9BOLvDAp7E3S7IvsnIW4Van9jw5tPWRkaadZCPUdDsMEE7q0apjpqLWq5oMJHyR4Ww==@brew-dashboard.documents.azure.com:10255/brew-dashboard?ssl=true';
+var url = 'mongodb://ht-hyper-hipster:n4Wk2GBI4Y9yQbard727ODLGW3SJ4jMIfxhyvAC357jKw4FZmRxlRodR63PxsiSIzUGfUiCa5fawlXMTFIUaMg==@ht-hyper-hipster.documents.azure.com:10255/brew-dashboard?ssl=true';
 
 module.exports = function(request, response) {
-    var error,
-        email,
+    var email,
         preferences;
 
-    if (!request.body.email) {
-        error = new Error('Unexpected payload: Missing email');
-        return response(error);
+    if (!request.body || !request.body.email) {
+        return response(new Error('Unexpected payload: Missing email'));
     }
 
     email = request.body.email;
 
-    if (!request.body.preferences) {
-        error = new Error('Unexpected payload: Missing preferences');
-        return response(error);
+    if (!request.body || !request.body.preferences) {
+        return response(new Error('Unexpected payload: Missing preferences'));
     }
 
     preferences = request.body.preferences;
@@ -32,17 +29,14 @@ module.exports = function(request, response) {
             });
         }
         else {
-            db.close();
-            error = new Error('Error storing document');            
-            return response(error);
+            db.close();           
+            return response(new Error('Error storing document'));
         }
     });
 };
 
 function insertPreferences(email, preferences, db, callback) {
-    // Get the documents collection
     var collection = db.collection('user-preferences');
-    // Insert some documents
     collection.findOneAndUpdate(
         { email: email },
         { $set: { preferences: preferences }},

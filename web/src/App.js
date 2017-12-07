@@ -101,19 +101,11 @@ class App extends Component {
       body: { email: this.state.email, preferences: this.state.preferences }
     };
 
-    Request(requestOptions, this.processPreferencesResponse)
+    Request(requestOptions, this.processPreferencesResponse);
   }
 
   processPreferencesResponse(error, response, body) {
-    console.log('processPreferencesResponse');
-    console.log('error:');
-    console.log(error);
-    console.log('response:');
-    console.log(response);
-    console.log('body:');
-    console.log(body);
-
-    if (response && response.statusCode === 200 && !body) {
+    if (response && response.statusCode === 200 && body) {
       this.setState({ preferences: body.preferences });
     }
   }
