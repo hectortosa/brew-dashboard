@@ -12,9 +12,10 @@ module.exports.setAndCheck = function (context) {
           email: preference.email,
           maxThreshold: preference.preferences.maxThreshold,
           minThreshold: preference.preferences.minThreshold,
-          value: newReading.value,
-          units: newReading.units,
-          device: newReading.deviceId
+          celsius: newReading.celsius,
+          fahrenheit: newReading.fahrenheit,
+          device: newReading.deviceId,
+          timestamp: newReading.timestamp
         }
       })
     }
