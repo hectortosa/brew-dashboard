@@ -1,0 +1,47 @@
+
+service: brew-dashboard-set-and-check
+
+provider:
+  name: azure
+  location: North Eurpe
+
+plugins:
+  - serverless-azure-functions
+
+# you can add packaging information here
+#package:
+#  include:
+#    - include-me.js
+#    - include-me-dir/**
+#  exclude:
+#    - exclude-me.js
+#    - exclude-me-dir/**
+
+functions:
+  hello:
+    handler: handler.setAndCheck
+    events:
+      - http: true
+        x-azure-settings:
+          name: newReading #<string>, default - "req", specifies which name it's available on `context.bindings`
+          methods: #<array> [GET, POST, PUT, DELETE], default - all
+            - GET
+          authLevel : anonymous
+      - http: true
+        x-azure-settings:
+          name: response
+          direction: out
+      - documentDB:
+        x-azure-settings:
+            name: preferences # Name of input parameter in function signature>",
+            databaseName: brew-dashboard # "<Name of the DocumentDB database>",
+            collectionName: user-preferences # "<Name of the DocumentDB collection>",
+            connection: DocumentDbConnectionString # "<Name of app setting with connection string - see below>",
+            direction: in
+      - documentDB:
+        x-azure-settings:
+            name: readings # Name of input parameter in function signature>",
+            databaseName: brew-dashboard # "<Name of the DocumentDB database>",
+            collectionName: redings # "<Name of the DocumentDB collection>",
+            connection: DocumentDbConnectionString # "<Name of app setting with connection string - see below>",
+            direction: out
