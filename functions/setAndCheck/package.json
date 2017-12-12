@@ -1,0 +1,13 @@
+{
+  "name": "brew-dashboard-set-and-check",
+  "version": "1.0.0",
+  "description": "Azure Functions to set and check temperature",
+  "main": "index.js",
+  "keywords": [
+    "azure",
+    "serverless"
+  ],
+  "dependencies": {
+    "request": "^2.83.0"
+  }
+}

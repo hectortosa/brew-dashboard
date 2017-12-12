@@ -31,9 +31,9 @@ class TemperatureChart extends Component {
                 }],
                 yAxes: [{
                     ticks: {
-                        suggestedMin: -10,
-                        suggestedMax: 110,
-                        stepSize: 10
+                        suggestedMin: 0,
+                        suggestedMax: 40,
+                        stepSize: 5
                     }
                 }]
             },
@@ -50,7 +50,7 @@ class TemperatureChart extends Component {
     getChartData(chart) {
         var datasets = chart.data.datasets;
 
-        this.props.getNewValue().forEach(newValue => {
+        this.props.getNewValue(function (newValue) {
             datasets[0].data.push({
                 x: Date.now(),
                 y: newValue

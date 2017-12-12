@@ -1,0 +1,24 @@
+{
+  "disabled": false,
+  "bindings": [
+    {
+      "direction": "in",
+      "type": "httpTrigger",
+      "name": "request",
+      "webHookType": "genericJson"
+    },
+    {
+      "direction": "in",
+      "type": "documentDB",
+      "name": "preferences",
+      "connection": "DocumentDbConnectionString",
+      "databaseName": "brew-dashboard",
+      "collectionName": "user-preferences"
+    },
+    {
+      "direction": "out",
+      "type": "http",
+      "name": "response"
+    }
+  ]
+}

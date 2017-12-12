@@ -44,13 +44,22 @@ class App extends Component {
         </p>
         <Login email={this.state.email} onChange={this.handleLogin} onLogin={this.login} />
         <UserPreferences value={this.state.preferences} onChange={this.handlePreferences} onSave={this.setPreferences} />
-        <TemperatureChart width={200} height={500} getNewValue={this.fetchData} refreshTime={5000} delayTime={0} />
+        <TemperatureChart width={200} height={500} getNewValue={this.fetchData} refreshTime={5000} delayTime={1000} />
       </div>
     );
   }
 
-  fetchData() {
-    return [Math.floor(Math.random() * 100)];
+  fetchData(callback) {
+    let requestOptions = {
+      uri: 'https://ht-brew-dashboard.azurewebsites.net/api/getLastReading?code=t1hVZh/kJeVkJjmCwR/QXGZ02b8iTH2gdFD6kT68dYa/wszdGia1ZQ==&clientId=default',
+      method: 'POST',
+      json: true,
+      body: { requestTime: Date.now() }
+    };
+
+    Request(requestOptions, function (error, response, body) {
+      callback(body.celsius);
+    });
   }
 
   handleLogin(event) {
@@ -67,7 +76,7 @@ class App extends Component {
 
   fetchPreferences(email) {
     let requestOptions = {
-      uri: 'https://wt-773198c4400b904deded251f7813917d-0.sandbox.auth0-extend.com/brew-dashboard-get-preferences-dev-main',
+      uri: 'https://ht-brew-dashboard.azurewebsites.net/api/getPreferences?code=e6InRdiOfu4s7ROHAfAXR93d1ShhXPh2ZKvkxaUh78bXwec66jwsbQ==&clientId=default',
       method: 'POST',
       json: true,
       body: { email: this.state.email }
@@ -95,7 +104,7 @@ class App extends Component {
 
   savePreferences(email, preferences) {
     let requestOptions = {
-      uri: 'https://wt-773198c4400b904deded251f7813917d-0.sandbox.auth0-extend.com/brew-dashboard-set-preferences-dev-main',
+      uri: 'https://ht-brew-dashboard.azurewebsites.net/api/setPreferences?code=zHWq8B0Fyox3rxsW52psv61vSkrAsGXvt4xUiLbolCuDR8Vu4pjBFg==&clientId=default',
       method: 'POST',
       json: true,
       body: { email: this.state.email, preferences: this.state.preferences }
