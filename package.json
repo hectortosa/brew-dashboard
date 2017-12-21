@@ -11,9 +11,9 @@
     "react-scripts": "1.0.17"
   },
   "scripts": {
-    "start": "cd web && react-scripts start",
-    "build": "cd web && react-scripts build",
-    "test": "cd web && react-scripts test --env=jsdom",
-    "eject": "cd web && react-scripts eject"
+    "start": "cd web && yarn install && react-scripts start",
+    "build": "cd web && yarn install && react-scripts build",
+    "test": "cd web && yarn install && react-scripts test --env=jsdom",
+    "eject": "cd web && yarn install && react-scripts eject"
   }
 }
