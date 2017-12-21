@@ -1,0 +1,19 @@
+{
+  "name": "brew-dashboard",
+  "version": "1.0.0",
+  "description": "Beer fermentation temperature monitor",
+  "repository": "https://github.com/hectortosa/brew-dashboard.git",
+  "author": "Héctor Tortosa <hectortosa@icloud.com>",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.1.1",
+    "react-scripts": "1.0.17"
+  },
+  "scripts": {
+    "start": "cd web && react-scripts start",
+    "build": "cd web && react-scripts build",
+    "test": "cd web && react-scripts test --env=jsdom",
+    "eject": "cd web && react-scripts eject"
+  }
+}
