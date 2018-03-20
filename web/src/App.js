@@ -1,17 +1,14 @@
 import React, {Component} from 'react';
-import {
-    BrowserRouter as Router,
-    Route,
-    Link
-} from 'react-router-dom'
+import {BrowserRouter as Router, Link, Route} from 'react-router-dom'
 
 import logo from './img/brew-dashboard.png';
-import './css/App.css';
+import './App.css';
 
 import Request from 'request';
-import Login from './Login';
-import UserPreferences from './UserPreferences';
+import Login from './Login/Login';
+import UserPreferences from './Preferences/UserPreferences';
 import Home from './Home/Home';
+import {PrivateRoute} from './Auth';
 
 
 class App extends Component {
@@ -67,9 +64,9 @@ class App extends Component {
                         </div>
                     </nav>
                     <div className="container">
-                        <Route exact path="/" component={Home}/>
                         <Route path="/login" component={Login}/>
-                        <Route path="/preferences" component={UserPreferences}/>
+                        <PrivateRoute exact path="/" component={Home}/>
+                        <PrivateRoute path="/preferences" component={UserPreferences}/>
                     </div>
                 </div>
             </Router>
