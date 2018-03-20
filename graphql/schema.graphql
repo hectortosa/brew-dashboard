@@ -1,0 +1,106 @@
+﻿enum BeerStyle {
+  BELGIAN_ALE
+  FARMHOUSE_ALE
+  IPA
+  LAGER
+  PALE_ALE
+  PILSNER
+  PORTER
+  SOUR
+  STOUT
+}
+
+enum DeviceType {
+  GRAVITY
+  PH
+  TEMPERATURE
+}
+
+type User {
+  email: ID!
+  name: String
+  settings(limit: Int, nextToken: String): SettingsConnection
+}
+
+type UserConnection {
+  items: [User]
+  nextToken: String
+}
+
+type Settings {
+  maxTempThreshold: Float!
+  minTempThreshold: Float!
+  settingsId: ID!
+  userEmail: ID!
+}
+
+type SettingsConnection {
+  items: [Settings]
+  nextToken: String
+}
+
+type Beer {
+  abv: Float!
+  batchSize: Float
+  bottledAt: String
+  brewedAt: String
+  ibu: Int!
+  id: ID!
+  measureDevices: DeviceConnection
+  name: String!
+  style: BeerStyle!
+}
+
+type BeerConnection {
+  items: [Beer]
+  nextToken: String
+}
+
+type Device {
+  beerId: ID!
+  deviceId: ID!
+  deviceName: String!
+  measures: MeasureConnection
+  type: DeviceType!
+}
+
+type DeviceConnection {
+  items: [Device]
+  nextToken: String
+}
+
+type Measure {
+  deviceId: ID!
+  measureId: ID!
+  timestamp: String!
+  units: String!
+  value: Float!
+}
+
+type MeasureConnection {
+  items: [Measure]
+  nextToken: String
+}
+
+type Query {
+  getBeer(id: ID!): Beer
+  getUser(email: ID!): User
+  listBeers(limit: Int, nextToken: String): BeerConnection
+  listUsers(limit: Int, nextToken: String): UserConnection
+}
+
+type Mutation {
+  attachDeviceToBeer(beerId: ID!, deviceId: ID!, deviceName: String!, type: DeviceType!): Device
+  configureSettingsForUser(maxTempThreshold: Float!, minTempThreshold: Float!, userEmail: ID!): Settings
+  createBeer(abv: Float!, batchSize: Float, bottledAt: String, brewedAt: String, ibu: Int, name: String!, style: BeerStyle!): Beer
+  createUser(email: ID!, name: String!): User
+  deleteUser(email: ID!): User
+  newDeviceMeasure(deviceId: ID!, timestamp: String!, units: String!, value: Float!): Measure
+}
+
+type Subscription {
+  subscribeToNewMeasures(deviceId: String!): Measure
+    @aws_subscribe(mutations:["newDeviceMeasure"])
+  subscribeToUserSettings(userEmail: String!): Settings
+    @aws_subscribe(mutations:["configureSettingsForUser"])
+}
