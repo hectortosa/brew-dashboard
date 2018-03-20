@@ -57,7 +57,7 @@ class App extends Component {
                     </nav>
                     <div className="container">
                         <Route path="/login" component={Login}/>
-                        <PrivateRoute exact path="/" component={Home}/>
+                        <Route exact path="/" component={Home}/>
                         <PrivateRoute path="/preferences" component={UserPreferences}/>
                     </div>
                 </div>
