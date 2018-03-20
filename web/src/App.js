@@ -1,37 +1,29 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Link, Route} from 'react-router-dom'
+import AWSAppSyncClient from 'aws-appsync';
+import {Rehydrated} from 'aws-appsync-react';
+import {AUTH_TYPE} from 'aws-appsync/lib/link/auth-link';
+import {ApolloProvider} from 'react-apollo';
+import AppSync from './AppSync.js';
 
 import logo from './img/brew-dashboard.png';
 import './App.css';
-
-import Request from 'request';
 import Login from './Login/Login';
 import UserPreferences from './Preferences/UserPreferences';
 import Home from './Home/Home';
 import {PrivateRoute} from './Auth';
 
+const client = new AWSAppSyncClient({
+    url: AppSync.graphqlEndpoint,
+    region: AppSync.region,
+    auth: {
+        type: AUTH_TYPE.API_KEY,
+        apiKey: AppSync.apiKey
+    },
+});
+
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            email: '',
-            preferences: {
-                minThreshold: '',
-                maxThreshold: ''
-            }
-        };
-
-        this.handleLogin = this.handleLogin.bind(this);
-        this.login = this.login.bind(this);
-
-        this.fetchPreferences = this.fetchPreferences.bind(this);
-        this.handlePreferences = this.handlePreferences.bind(this);
-        this.setPreferences = this.setPreferences.bind(this);
-        this.savePreferences = this.savePreferences.bind(this);
-        this.processPreferencesResponse = this.processPreferencesResponse.bind(this);
-    }
 
     render() {
         return (
@@ -72,63 +64,14 @@ class App extends Component {
             </Router>
         );
     }
-
-    handleLogin(event) {
-        this.setState({email: event.target.value});
-    }
-
-    login(event) {
-        if (this.state.email !== '') {
-            this.fetchPreferences(this.state.email);
-        }
-
-        event.preventDefault();
-    }
-
-    fetchPreferences(email) {
-        let requestOptions = {
-            uri: 'https://ht-brew-dashboard.azurewebsites.net/api/getPreferences?code=e6InRdiOfu4s7ROHAfAXR93d1ShhXPh2ZKvkxaUh78bXwec66jwsbQ==&clientId=default',
-            method: 'POST',
-            json: true,
-            body: {email: this.state.email}
-        };
-
-        Request(requestOptions, this.processPreferencesResponse)
-    }
-
-    handlePreferences(event) {
-        var preferences = this.state.preferences;
-        preferences[event.target.name] = event.target.value;
-
-        this.setState({
-            preferences: preferences
-        });
-    }
-
-    setPreferences(event) {
-        if (this.state.email !== '' && this.state.preferences.minThreshold !== '' && this.state.preferences.maxThreshold !== '') {
-            this.savePreferences(this.state.email, this.state.preferences);
-        }
-
-        event.preventDefault();
-    }
-
-    savePreferences(email, preferences) {
-        let requestOptions = {
-            uri: 'https://ht-brew-dashboard.azurewebsites.net/api/setPreferences?code=zHWq8B0Fyox3rxsW52psv61vSkrAsGXvt4xUiLbolCuDR8Vu4pjBFg==&clientId=default',
-            method: 'POST',
-            json: true,
-            body: {email: this.state.email, preferences: this.state.preferences}
-        };
-
-        Request(requestOptions, this.processPreferencesResponse);
-    }
-
-    processPreferencesResponse(error, response, body) {
-        if (response && response.statusCode === 200 && body) {
-            this.setState({preferences: body.preferences});
-        }
-    }
 }
 
-export default App;
+const WithProvider = () => (
+    <ApolloProvider client={client}>
+        <Rehydrated>
+            <App />
+        </Rehydrated>
+    </ApolloProvider>
+);
+
+export default WithProvider;

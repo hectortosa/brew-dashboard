@@ -1,29 +1,42 @@
 import React, {Component} from 'react';
+import gql from 'graphql-tag';
+import {graphql} from 'react-apollo';
 import TemperatureChart from '../TemperatureChart';
-import Request from 'request';
 
-export default class Home extends Component {
+class Home extends Component {
     render() {
+        const {users} = this.props;
         return (
             <div className="text-center">
-                <h1>Temperature Monitor</h1>
-                <TemperatureChart width={200} height={500} getNewValue={this.fetchData} refreshTime={5000}
-                                  delayTime={1000}/>
+                <h1>Test data!!!</h1>
+                {
+                    users.map(el => <div key={el.email}>{el.email}</div>)
+                }
+                <TemperatureChart width={200} height={500} label="Live data" />
             </div>
         )
     }
-
-    fetchData(callback) {
-        let requestOptions = {
-            uri: 'https://ht-brew-dashboard.azurewebsites.net/api/getLastReading?code=t1hVZh/kJeVkJjmCwR/QXGZ02b8iTH2gdFD6kT68dYa/wszdGia1ZQ==&clientId=default',
-            method: 'POST',
-            json: true,
-            body: {requestTime: Date.now()}
-        };
-
-        Request(requestOptions, function (error, response, body) {
-            if (error) return;
-            callback(body.celsius);
-        });
-    }
 }
+
+const Users = gql`
+    query {
+        listUsers {
+            items {
+                email
+                name
+            }
+        }
+    }
+`;
+
+const HomeWithData = graphql(Users, {
+    options: {
+        fetchPolicy: 'cache-and-network'
+    },
+    props: (props) => ({
+        users: props.data.listUsers && props.data.listUsers.items,
+    })
+
+})(Home);
+
+export default HomeWithData;

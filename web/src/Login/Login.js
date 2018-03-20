@@ -17,16 +17,16 @@ class Login extends Component {
     onLogin() {
         if (this.state.email) {
             auth.hasAuth = true;
-            this.setState({ redirectToReferrer: true });
+            this.setState({redirectToReferrer: true});
         }
     }
 
     render() {
-        const { from } = this.props.location.state || { from: { pathname: "/" } };
-        const { redirectToReferrer } = this.state;
+        const {from} = this.props.location.state || {from: {pathname: '/'}};
+        const {redirectToReferrer} = this.state;
 
         if (redirectToReferrer) {
-            return <Redirect to={from} />;
+            return <Redirect to={from}/>;
         }
 
         return (
@@ -36,13 +36,12 @@ class Login extends Component {
                         Sign In
                     </div>
                     <div className="card-body">
-                        <form>
+                        <form onSubmit={() => this.onLogin()}>
                             <label htmlFor="email" className="sr-only">Email address</label>
                             <input type="email" id="email" className="form-control" placeholder="Email"
-                                   value={this.props.email} onChange={(e) => this.onEmailChange(e)}/>
-                            <button id="btn-login" type="button" onClick={() => this.onLogin()}
-                                    className="btn btn-lg btn-primary btn-block">Login
-                            </button>
+                                   value={this.props.email} onChange={(e) => this.onEmailChange(e)}
+                            autoFocus/>
+                            <button className="btn btn-lg btn-primary btn-block">Login</button>
                         </form>
                     </div>
                 </div>
