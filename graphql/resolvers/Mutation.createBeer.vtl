@@ -1,0 +1,16 @@
+{
+    "version": "2017-02-28",
+    "operation": "PutItem",
+    "key": {
+        "id": { "S": "$util.autoId()" }
+    },
+    "attributeValues": {
+    	"name": { "S": "$context.arguments.name" },
+        "style": { "S": "$context.arguments.style" },
+        "abv": { "N": "$context.arguments.abv" },
+        "ibu": { "N": "$context.arguments.ibu" },
+        "brewedAt": { "S": "$context.arguments.brewedAt" },
+        "bottledAt": { "S": "$context.arguments.bottledAt" },
+        "batchSize": { "N": "$context.arguments.batchSize" }
+    }
+}

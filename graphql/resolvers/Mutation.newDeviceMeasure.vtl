@@ -1,0 +1,13 @@
+{
+    "version": "2017-02-28",
+    "operation": "PutItem",
+    "key": {
+        "deviceId": { "S": "$context.arguments.deviceId" },
+        "measureId": { "S": "$util.autoId()" }
+    },
+    "attributeValues": {
+    	"timestamp": { "S": "$context.arguments.timestamp" },
+        "value": { "N": "$context.arguments.value" },
+        "units": { "S": "$context.arguments.units" }
+    }
+}

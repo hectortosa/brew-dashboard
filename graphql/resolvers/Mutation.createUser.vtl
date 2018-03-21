@@ -1,0 +1,10 @@
+{
+    "version": "2017-02-28",
+    "operation": "PutItem",
+    "key": {
+        "email" : { "S" : "${context.arguments.email}" }
+    },
+    "attributeValues": {
+    	"name": { "S": "$context.arguments.name" }
+    }
+}

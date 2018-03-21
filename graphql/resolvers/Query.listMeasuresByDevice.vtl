@@ -1,0 +1,16 @@
+{
+    "version": "2017-02-28",
+    "operation": "Query",
+    "index": "U4BS-measures-deviceId-timestamp-index",
+    "query": {
+        "expression": "deviceId = :deviceId",
+        "expressionValues": {
+            ":deviceId": {
+                "S": "$context.arguments.deviceId"
+            }
+        }
+    },
+    "scanIndexForward": false,
+    "limit": #if($context.arguments.limit) $context.arguments.limit #else 10 #end,
+    "nextToken": #if($context.arguments.nextToken) "$context.arguments.nextToken" #else null #end
+}

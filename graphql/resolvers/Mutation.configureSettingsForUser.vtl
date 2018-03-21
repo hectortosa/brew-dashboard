@@ -1,0 +1,11 @@
+{
+    "version": "2017-02-28",
+    "operation": "PutItem",
+    "key": {
+        "userEmail": { "S": "${context.arguments.userEmail}" }
+    },
+    "attributeValues": {
+    	"minTempThreshold": { "S": "$context.arguments.minTempThreshold" },
+        "maxTempThreshold": { "S": "$context.arguments.maxTempThreshold" }
+    }
+}
