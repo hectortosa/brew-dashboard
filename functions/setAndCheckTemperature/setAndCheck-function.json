@@ -1,0 +1,21 @@
+{
+    "disabled": false,
+    "bindings": [
+        {
+            "type": "httpTrigger",
+            "direction": "in",
+            "name": "reading",
+            "authLevel": "anonymous",
+            "methods": [
+                "POST"
+            ]
+        },
+        {
+            "type": "http",
+            "direction": "out",
+            "name": "response"
+        }
+    ],
+    "entryPoint": "setAndCheck",
+    "scriptFile": "handler.js"
+}
