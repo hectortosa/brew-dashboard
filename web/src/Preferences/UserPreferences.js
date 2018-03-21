@@ -15,7 +15,7 @@ class UserPreferences extends Component {
 
     componentWillMount() {
         const user = Object.assign({}, this.props.user);
-        user.settings = user.settings || {};
+        user.settings = user.settings || { minTempThreshold: '', maxTempThreshold: ''};
         this.setState({user});
     }
 
@@ -45,7 +45,6 @@ class UserPreferences extends Component {
     }
 
     setMaxTemp(value) {
-
         this.setState({
             user: {
                 settings: {
