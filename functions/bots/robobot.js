@@ -2,13 +2,13 @@ var request = require('request-promise-native');
 var emoji = require('node-emoji').emoji;
 
 var telegramUrl = 'https://api.telegram.org/bot';
-var token = '186933105:AAE8Cmw5WAF4mAKefxsLJJH0Mp6IACoXZSc';
+var token = '<your_token>';
 
 var AppSync = {
-    "url": "https://zynbjtfvhncqvj4sfaxcbiqmdy.appsync-api.eu-west-1.amazonaws.com/graphql",
-    "region": "eu-west-1",
+    "url": "<app_sync_api_url>",
+    "region": "<app_sync_region>",
     "authenticationType": "API_KEY",
-    "apiKey": "da2-au2olyd6r5abfnurhqfze3bh6e"
+    "apiKey": "<app_sync_api_key>"
 };
 
 function getSettingsQuery(user) {
