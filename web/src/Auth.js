@@ -2,14 +2,23 @@ import React from 'react';
 import {Redirect, Route} from 'react-router-dom';
 
 export class Auth {
+
+    _email = null;
+
     get isLoggedIn() {
-        return this.hasAuth;
+        return this._email !== null;
     }
 
-    _hasAuth = false;
+    get email() {
+        return this._email;
+    }
+
+    set email(email) {
+        this._email = email;
+    }
 }
 
-export const PrivateRoute = ({ component: Component, ...rest }) => (
+export const PrivateRoute = ({component: Component, ...rest}) => (
     <Route
         {...rest}
         render={props =>
@@ -18,8 +27,8 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
             ) : (
                 <Redirect
                     to={{
-                        pathname: "/login",
-                        state: { from: props.location }
+                        pathname: '/login',
+                        state: {from: props.location}
                     }}
                 />
             )

@@ -16,7 +16,7 @@ class Login extends Component {
 
     onLogin() {
         if (this.state.email) {
-            auth.hasAuth = true;
+            auth.email = this.state.email;
             this.setState({redirectToReferrer: true});
         }
     }
