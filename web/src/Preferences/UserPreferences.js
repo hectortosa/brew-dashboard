@@ -1,16 +1,67 @@
 import React, {Component} from 'react';
 import gql from 'graphql-tag';
-import {graphql} from 'react-apollo';
+import {graphql, compose} from 'react-apollo';
 import auth from '../Auth';
 import './UserPreferences.css';
 
 class UserPreferences extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            user: undefined
+        }
+    }
+
+    componentWillMount() {
+        const user = Object.assign({}, this.props.user);
+        user.settings = user.settings || {};
+        this.setState({user});
+    }
+
+    async onSave(event, settings) {
+        event.preventDefault();
+        const result = await this.props.settingsMutation({
+            variables: {
+                email: auth.email,
+                min: settings.minTempThreshold,
+                max: settings.maxTempThreshold
+            },
+        });
+        const newSettings = result.data.configureSettingsForUser;
+
+        alert('Settings saved! ' + JSON.stringify(newSettings));
+    }
+
+    setMinTemp(value) {
+        this.setState({
+            user: {
+                settings: {
+                    minTempThreshold: value,
+                    maxTempThreshold: this.state.user.settings.maxTempThreshold
+                }
+            }
+        });
+    }
+
+    setMaxTemp(value) {
+
+        this.setState({
+            user: {
+                settings: {
+                    minTempThreshold: this.state.user.settings.minTempThreshold,
+                    maxTempThreshold: value
+                }
+            }
+        });
+    }
+
     render() {
         let settings = null;
-        const {user} = this.props;
+        const {user} = this.state;
 
-        if (user && user.settings && user.settings.items) {
-            settings = user.settings.items[0];
+        if (user) {
+            settings = user.settings || {};
         }
 
         return (
@@ -18,13 +69,16 @@ class UserPreferences extends Component {
                 <h2>Preferences</h2>
                 {!settings
                     ? null
-                    : (<form onSubmit={() => this.onSave()}>
+                    : (<form onSubmit={(e) => this.onSave(e, settings)}>
+
                         <label htmlFor="min">Min threshold</label>
-                        <input id="min" className="form-control" placeholder="Min threshold"
-                               value={settings.minTempThreshold} onChange={(e) => settings.minTempThreshold = e.target.value}/>
+                        <input type="text" id="min" className="form-control" placeholder="Min threshold"
+                               value={settings.minTempThreshold}
+                               onChange={(e) => this.setMinTemp(e.target.value)}/>
                         <label htmlFor="max">Max threshold</label>
-                        <input id="max" className="form-control" placeholder="Max threshold"
-                               value={settings.maxTempThreshold} onChange={(e) => settings.maxTempThreshold = e.target.value}/>
+                        <input type="text" id="max" className="form-control" placeholder="Max threshold"
+                               value={settings.maxTempThreshold}
+                               onChange={(e) => this.setMaxTemp(e.target.value)}/>
                         <button className="btn btn-lg btn-primary btn-block">Save</button>
                     </form>)
                 }
@@ -39,25 +93,37 @@ const USER_QUERY = gql`
             email
             name
             settings {
-                items {
-                    maxTempThreshold
-                    minTempThreshold
-                }
+                maxTempThreshold
+                minTempThreshold
             }
         }
     }
 `;
 
-const withData = graphql(USER_QUERY, {
-    options: () => ({
-        variables: {
-            email: auth.email
-        },
-        fetchPolicy: 'cache-and-network'
-    }),
-    props: (props) => ({
-        user: props.data.getUser
-    })
-})(UserPreferences);
+const SETTINGS_MUTATION = gql`
+    mutation setSettings($email: ID!, $min: Float!, $max: Float!) {
+        configureSettingsForUser(userEmail: $email, minTempThreshold: $min, maxTempThreshold: $max) {
+            maxTempThreshold
+            minTempThreshold
+        }
+    }
+`;
 
-export default withData;
+const withData = compose(
+    graphql(USER_QUERY, {
+        options: () => ({
+            variables: {
+                email: auth.email
+            },
+            fetchPolicy: 'cache-and-network'
+        }),
+        props: (props) => ({
+            user: props.data.getUser
+        })
+    }),
+    graphql(SETTINGS_MUTATION, {
+        name: 'settingsMutation'
+    })
+);
+
+export default withData(UserPreferences);

@@ -14,7 +14,8 @@ class Login extends Component {
         this.setState({email: e.target.value});
     }
 
-    onLogin() {
+    onLogin(event) {
+        event.preventDefault();
         if (this.state.email) {
             auth.email = this.state.email;
             this.setState({redirectToReferrer: true});
@@ -36,11 +37,11 @@ class Login extends Component {
                         Sign In
                     </div>
                     <div className="card-body">
-                        <form onSubmit={() => this.onLogin()}>
+                        <form onSubmit={(e) => this.onLogin(e)}>
                             <label htmlFor="email" className="sr-only">Email address</label>
                             <input type="email" id="email" className="form-control" placeholder="Email"
                                    value={this.props.email} onChange={(e) => this.onEmailChange(e)}
-                            autoFocus/>
+                                   autoFocus/>
                             <button className="btn btn-lg btn-primary btn-block">Login</button>
                         </form>
                     </div>
