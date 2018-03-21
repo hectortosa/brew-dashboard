@@ -1,13 +1,31 @@
 import React, {Component} from 'react';
 import {Line} from 'react-chartjs-2';
-// eslint-disable-next-line
-import * as ChartjsStreaming from 'chartjs-plugin-streaming';
+
+const options = {
+    maintainAspectRatio: false,
+    scales: {
+        xAxes: [{
+            type: 'time'
+        }],
+        yAxes: [{
+            ticks: {
+                suggestedMin: 0,
+                suggestedMax: 40,
+                stepSize: 5
+            }
+        }]
+    }
+};
 
 class TemperatureChart extends Component {
-    constructor(props) {
-        super(props);
 
-        this.state = {
+    static defaultProps = {
+        width: 100,
+        height: 100
+    };
+
+    state = {
+        data: {
             datasets: [
                 {
                     label: 'Fermentation temp',
@@ -19,51 +37,41 @@ class TemperatureChart extends Component {
                     data: []
                 }
             ]
-        };
+        }
+    };
 
-        this.getChartData = this.getChartData.bind(this);
+    constructor(props) {
+        super(props);
 
-        this.options = {
-            maintainAspectRatio: false,
-            scales: {
-                xAxes: [{
-                  type: 'realtime'
-                }],
-                yAxes: [{
-                    ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: 40,
-                        stepSize: 5
-                    }
-                }]
-            },
-            plugins: {
-                streaming: {
-                    refresh: this.props.refreshTime,
-                    onRefresh: this.getChartData,
-                    delay: this.props.delayTime
-                }
+        if (!props.stream) {
+            return;
+        }
+
+        props.stream.subscribe((next) => {
+            const data = this.state.data.datasets[0].data;
+            data.push(next);
+            if (data.length > 10) {
+                data.shift();
             }
-        };
-    }
-
-    getChartData(chart) {
-        var datasets = chart.data.datasets;
-
-        this.props.getNewValue(function (newValue) {
-            datasets[0].data.push({
-                x: Date.now(),
-                y: newValue
-            }); 
+            if (this.lineCmp !== undefined) {
+                this.lineCmp.chartInstance.update();
+            }
         });
     }
 
     render() {
+        const hasLabel = !!this.props.label;
         return (
             <div>
-                <h2>Live data</h2>
-                <Line data={this.state} options={this.options} width={this.props.width} height={this.props.height}/>
-            </div>);
+                {hasLabel
+                    ? <h2>{this.props.label}</h2>
+                    : null
+                }
+                <Line ref={(child) => {
+                    this.lineCmp = child;
+                }} data={this.state.data} options={options} width={this.props.width} height={this.props.height}/>
+            </div>
+        );
     }
 }
 
