@@ -13,8 +13,6 @@ class Home extends Component {
     constructor(props) {
         super(props);
 
-        console.log(props.measures)
-
         setTimeout(() => {
             const measures = this.props.measures || [];
             measures.forEach(x => this.tempSubject.next({
