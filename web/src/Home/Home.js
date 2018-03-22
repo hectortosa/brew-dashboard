@@ -42,7 +42,7 @@ class Home extends Component {
     }
 }
 
-const deviceId = 'raspberry-pi-temp-sb118';
+const deviceId = '28-8000000117ab';
 
 const Measures = gql`
     query {
