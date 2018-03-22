@@ -26,7 +26,7 @@ module.exports.setAndCheck = function (context) {
 function alertUsers(measure, ctx) {
   logObject(measure, 'New measure', ctx);
   return request({
-    uri: 'https://zynbjtfvhncqvj4sfaxcbiqmdy.appsync-api.eu-west-1.amazonaws.com/graphql',
+    uri: getEnvironmentVariable('GraphQlUrl'),
     method: 'POST',
     json: true,
     body: {
@@ -43,7 +43,7 @@ function alertUsers(measure, ctx) {
           }`
     },
     headers: {
-      "x-api-key": "da2-au2olyd6r5abfnurhqfze3bh6e"
+      "x-api-key": getEnvironmentVariable('GraphQlKey')
     }
   }).then(function (response) {
     logObject(response, 'query listUsers response', ctx);
@@ -59,7 +59,7 @@ function processUsers(users, measure, ctx) {
       ctx.log(`Reading is outside thresholds: ${user.settings.minTempThreshold} < ${measure.celsius} > ${user.settings.maxTempThreshold}`);
 
       return request({
-        uri: 'https://u4-ek-dev-trigger-http-webhook.azurewebsites.net/api/v1/triggers/http-webhook/aff874b4-119c-4d84-987d-89189d4ad38e?sig=vqWJFmR9iIu%252bvKiCtcWoCtTs%252fIy%252bffCjaVPiZGtePTI%253d',
+        uri: getEnvironmentVariable('NotificationsUrl'),
         method: 'POST',
         json: true,
         body: {
@@ -70,9 +70,9 @@ function processUsers(users, measure, ctx) {
           timestamp: measure.timestamp
         }
       }).then(function (response) {
-        logObject(response, 'EK request response', ctx);
+        logObject(response, 'Notifications request response', ctx);
       }).catch(function (error) {
-        logObject(error, 'EK request error', ctx);
+        logObject(error, 'Notifications request error', ctx);
       });
     }
   });
@@ -83,7 +83,7 @@ function processUsers(users, measure, ctx) {
 function storeMeasure(measure, ctx) {
   logObject(measure, 'Measure to store', ctx);
   return request({
-    uri: 'https://zynbjtfvhncqvj4sfaxcbiqmdy.appsync-api.eu-west-1.amazonaws.com/graphql',
+    uri: getEnvironmentVariable('AwsAppSyncUrl'),
     method: 'POST',
     json: true,
     body: {
@@ -98,7 +98,7 @@ function storeMeasure(measure, ctx) {
             }`
     },
     headers: {
-      "x-api-key": "da2-au2olyd6r5abfnurhqfze3bh6e"
+      "x-api-key": getEnvironmentVariable('AwsAppSyncKey')
     }
   }).then(function (response) {
     logObject(response, 'mutaiton newDeviceMeasure response', ctx);
@@ -114,6 +114,10 @@ function isReadingOutsideThresholds(value, settings, context) {
 
   return val < min || val > max;
 }
+
+function getEnvironmentVariable(name) {
+  return process.env[name];
+};
 
 function logObject(object, message, ctx) {
   ctx.log(message);
