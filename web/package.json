@@ -13,7 +13,7 @@
     "graphql-tag": "^2.8.0",
     "jquery": "^3.3.1",
     "moment": "^2.21.0",
-    "popper.js": "^1.14.1",
+    "popper.js": "^1.15.0",
     "react": "^16.1.1",
     "react-apollo": "^2.0.4",
     "react-chartjs-2": "^2.6.4",
