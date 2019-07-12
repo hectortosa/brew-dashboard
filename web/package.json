@@ -7,7 +7,7 @@
     "aws-appsync": "^1.0.14",
     "aws-appsync-react": "^1.0.6",
     "aws-sdk": "^2.211.1",
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.1.0",
     "chart.js": "^2.7.1",
     "chartjs-plugin-streaming": "^1.2.0",
     "graphql-tag": "^2.8.0",
