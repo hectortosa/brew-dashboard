@@ -2593,8 +2593,8 @@ safe-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.0.tgz#dc4bbc7a6ca9d916dee5d43516f0092b58f7b8ab"
 
 serverless-azure-functions@*:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/serverless-azure-functions/-/serverless-azure-functions-0.5.0.tgz#e8f9c4cee0a6c6dde72f7d7e9885352dd1ff4456"
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/serverless-azure-functions/-/serverless-azure-functions-0.7.0.tgz#8e3c8713b48979680042c070d017fb16b43226bd"
   dependencies:
     az-login "^0.3.0"
     azure-arm-resource "^2.0.0-preview"
